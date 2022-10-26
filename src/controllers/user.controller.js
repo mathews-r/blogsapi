@@ -20,7 +20,7 @@ const getUsers = async (_req, res) => {
 
 const getUserById = async (req, res) => {
   const { id } = req.params;
-  const user = await getUserByIdService(Number(id));
+  const user = await getUserByIdService(id);
 
   if (!user) {
     return res.status(404).json({ message: 'User does not exist' });
