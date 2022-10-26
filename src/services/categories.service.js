@@ -4,4 +4,9 @@ const newCategoryService = async (name) => {
   await Category.create(name);
 };
 
-module.exports = { newCategoryService };
+const getCategoryService = async () => {
+  const categories = await Category.findAll();
+  return categories;
+};
+
+module.exports = { newCategoryService, getCategoryService };
