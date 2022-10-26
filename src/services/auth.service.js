@@ -15,4 +15,5 @@ const validateLogin = async (email, password) => {
 
 module.exports = {
   validateLogin,
+
 };

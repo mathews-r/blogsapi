@@ -1,14 +1,19 @@
-const tokenValidation = async (req, res, next) => {
-  const { Authorization } = req.headers;
+const jwt = require('jsonwebtoken');
 
-  if (!Authorization) {
+const tokenValidation = async (req, res, next) => {
+  const { authorization } = req.headers;
+
+  if (!authorization) {
     return res.status(401).json({ message: 'Token not found' });
   }
 
-  if (Authorization) {
-    return res.status(401).json({ message: 'Expired or invalid token' });
+  try {
+    jwt.verify(authorization, process.env.JWT_SECRET);
+    return next();
+  } catch (error) {
+    const e = res.status(401).json({ message: 'Expired or invalid token' });
+    throw e;
   }
-  next();
 };
 
 module.exports = { tokenValidation };
