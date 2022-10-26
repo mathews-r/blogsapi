@@ -18,4 +18,12 @@ const getUsersService = async () => {
   const users = await User.findAll({ attributes: { exclude: 'password' } });
   return users;
 };
-module.exports = { newUserService, getUsersService };
+
+const getUserByIdService = async (id) => {
+  const user = await User.findByPk(id, {
+    attributes: { exclude: 'password' },
+  });
+  return user;
+};
+
+module.exports = { newUserService, getUsersService, getUserByIdService };

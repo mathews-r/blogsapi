@@ -10,5 +10,6 @@ userRouter.post('/', displayValidation,
 emailValidation, passwordValidation, userController.newUser);
 
 userRouter.get('/', tokenValidation, userController.getUsers);
+userRouter.get('/:id', tokenValidation, userController.getUserById);
 
 module.exports = userRouter;
