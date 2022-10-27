@@ -1,3 +1,4 @@
+const { Op } = require('sequelize');
 const { BlogPost, PostCategory, User, Category } = require('../models');
 
 const newPostService = async (id, { title, content, categoryIds }) => {
@@ -69,10 +70,27 @@ const deletePost = async (id, userId) => {
   return { status: 204, message: null };
 };
 
+const getByQuery = async (searchTherm, data) => {
+  const post = await BlogPost.findAll({
+    where: {
+      [data]: {
+        [Op.like]: `%${searchTherm}%`,
+      },
+    },
+    attributes: { exclude: ['user_id'] },
+    include: [
+      { model: User, as: 'user', attributes: { exclude: ['password'] } },
+      { model: Category, as: 'categories', through: { attributes: [] } },
+    ],
+  });
+  return post;
+};
+
 module.exports = {
   newPostService,
   getPostsService,
   getPostsByIdService,
   updatePostService,
   deletePost,
+  getByQuery,
 };

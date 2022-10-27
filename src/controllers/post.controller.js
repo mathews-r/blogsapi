@@ -4,6 +4,7 @@ const {
   getPostsByIdService,
   updatePostService,
   deletePost,
+  getByQuery,
 } = require('../services/post.service');
 
 const newPosts = async (req, res) => {
@@ -58,4 +59,11 @@ const removePost = async (req, res) => {
   return res.status(remove.status).json({ message: remove.message });
 };
 
-module.exports = { newPosts, getPosts, getPostById, updatePost, removePost };
+const getPostByQuery = async (req, res) => {
+  const { q } = req.query;
+  const posts = await getByQuery(q, 'content');
+
+  return res.status(200).json(posts);
+};
+
+module.exports = { newPosts, getPosts, getPostById, updatePost, removePost, getPostByQuery };
