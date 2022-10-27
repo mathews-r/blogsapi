@@ -1,10 +1,15 @@
 const { BlogPost, PostCategory, User, Category } = require('../models');
 
 const newPostService = async (id, { title, content, categoryIds }) => {
-  const { dataValues } = await BlogPost.create({ userId: id, title, content, categoryIds });
+  const { dataValues } = await BlogPost.create({
+    userId: id,
+    title,
+    content,
+    categoryIds,
+  });
 
-  const data = categoryIds.map((categoryId) => PostCategory
-    .create({ postId: dataValues.id, categoryId }));
+  const data = categoryIds.map((categoryId) =>
+    PostCategory.create({ postId: dataValues.id, categoryId }));
 
   await Promise.all(data);
 
@@ -37,4 +42,28 @@ const getPostsByIdService = async (id) => {
   return postById;
 };
 
-module.exports = { newPostService, getPostsService, getPostsByIdService };
+const updatePostService = async (id, { title, content }, userId) => {
+  const [getPosts] = await getPostsService();
+  // console.log(getPosts.dataValues.userId);
+  // const verifyUser = getPosts.some((user) => user.dataValues.id === userId);
+  if (getPosts.dataValues.userId === userId) {
+    const [postUpdated] = await BlogPost.update(
+      {
+        title,
+        content,
+      },
+      { where: { id } },
+    );
+  
+    return postUpdated > 0;
+  }
+
+  return { type: 'error', message: 'Unauthorized user' };
+};
+
+module.exports = {
+  newPostService,
+  getPostsService,
+  getPostsByIdService,
+  updatePostService,
+};
