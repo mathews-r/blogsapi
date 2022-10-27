@@ -1,4 +1,5 @@
-const { newPostService, getPostsService } = require('../services/post.service');
+const { newPostService,
+  getPostsService, getPostsByIdService } = require('../services/post.service');
 
 const newPosts = async (req, res) => {
   const data = req.body;
@@ -17,4 +18,13 @@ const getPosts = async (_req, res) => {
   return res.status(200).json(posts);
 };
 
-module.exports = { newPosts, getPosts };
+const getPostById = async (req, res) => {
+  const postById = await getPostsByIdService();
+
+  if (postById.type) {
+    return res.status(404).json({ message: postById.message });
+  } 
+  return res.status(200).json(postById);
+};
+
+module.exports = { newPosts, getPosts, getPostById };

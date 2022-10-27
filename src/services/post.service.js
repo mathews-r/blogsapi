@@ -22,4 +22,16 @@ const getPostsService = async () => {
   return posts;
 };
 
-module.exports = { newPostService, getPostsService };
+const getPostsByIdService = async (id) => {
+  const postById = await BlogPost.findByPk(id, {
+    attributes: { exclude: 'password' },
+  });
+
+  if (!postById) {
+    return { type: 'error', message: 'Post does not exist' };
+  }
+
+  return postById;
+};
+
+module.exports = { newPostService, getPostsService, getPostsByIdService };
