@@ -1,12 +1,17 @@
-const { newPostService,
-  getPostsService, getPostsByIdService, updatePostService } = require('../services/post.service');
+const {
+  newPostService,
+  getPostsService,
+  getPostsByIdService,
+  updatePostService,
+  deletePost,
+} = require('../services/post.service');
 
 const newPosts = async (req, res) => {
   const data = req.body;
   const { id } = req.user;
 
   const result = await newPostService(id, data);
-  
+
   if (result) {
     return res.status(201).json(result);
   }
@@ -25,7 +30,7 @@ const getPostById = async (req, res) => {
 
   if (postById.type) {
     return res.status(404).json({ message: postById.message });
-  } 
+  }
   return res.status(200).json(postById);
 };
 
@@ -44,4 +49,13 @@ const updatePost = async (req, res) => {
   return res.status(200).json(updatedPost);
 };
 
-module.exports = { newPosts, getPosts, getPostById, updatePost };
+const removePost = async (req, res) => {
+  const { id } = req.params;
+  const { id: userId } = req.user;
+
+  const remove = await deletePost(id, userId);
+
+  return res.status(remove.status).json({ message: remove.message });
+};
+
+module.exports = { newPosts, getPosts, getPostById, updatePost, removePost };

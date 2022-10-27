@@ -44,8 +44,7 @@ const getPostsByIdService = async (id) => {
 
 const updatePostService = async (id, { title, content }, userId) => {
   const [getPosts] = await getPostsService();
-  // console.log(getPosts.dataValues.userId);
-  // const verifyUser = getPosts.some((user) => user.dataValues.id === userId);
+
   if (getPosts.dataValues.userId === userId) {
     const [postUpdated] = await BlogPost.update(
       {
@@ -61,9 +60,19 @@ const updatePostService = async (id, { title, content }, userId) => {
   return { type: 'error', message: 'Unauthorized user' };
 };
 
+const deletePost = async (id, userId) => {
+  const getPost = await getPostsByIdService(id);
+
+  if (getPost.type) { return { status: 404, message: 'Post does not exist' }; }
+  if (getPost.userId !== userId) { return { status: 401, message: 'Unauthorized user' }; }
+
+  return { status: 204, message: null };
+};
+
 module.exports = {
   newPostService,
   getPostsService,
   getPostsByIdService,
   updatePostService,
+  deletePost,
 };
