@@ -24,7 +24,10 @@ const getPostsService = async () => {
 
 const getPostsByIdService = async (id) => {
   const postById = await BlogPost.findByPk(id, {
-    attributes: { exclude: 'password' },
+    include: [
+      { model: User, as: 'user', attributes: { exclude: ['password'] } },
+      { model: Category, as: 'categories', through: { attributes: [] } },
+    ],
   });
 
   if (!postById) {
