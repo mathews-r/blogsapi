@@ -8,8 +8,8 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
         type: DataTypes.INTEGER,
       },
-      published: DataTypes.DATE,
-      updated: DataTypes.DATE,
+      published: { type: DataTypes.DATE, defaultValue: new Date() },
+      updated: { type: DataTypes.DATE, defaultValue: new Date() },
     },
     {
       tableName: "blog_posts",
@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
     BlogPost.associate = (models) => {
       BlogPost.belongsTo(models.User, {
         foreingKey: 'user_id',
-        as: 'posts',
+        as: 'user',
       })
     }
   return BlogPost;

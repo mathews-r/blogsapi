@@ -8,7 +8,7 @@ const validateLogin = async (email, password) => {
     return { type: 'error', message: 'Invalid fields' };
   }
   
-  const token = jwtUtil.createToken(email);
+  const token = jwtUtil.createToken(email, user.id);
 
   return token;
 };
